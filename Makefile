@@ -7,11 +7,11 @@ CFLAGS = -std=c99 -Wall -Wextra -I ./src/headers -I ./src
 
 build-release: src/*
 	mkdir -p out
-	gcc ${CFLAGS} ${RELEASE_FLAGS} -o out/release src/main.c
+	gcc ${CFLAGS} ${RELEASE_FLAGS} -I src -I src/headers -o out/release src/main.c
 
 build-dev: src/*
 	mkdir -p out
-	gcc ${CFLAGS} ${DEV_FLAGS} -o out/dev src/main.c
+	gcc ${CFLAGS} ${DEV_FLAGS} -I src -I src/headers -o out/dev src/main.c
 
 release: build-release
 	./out/release $(file)

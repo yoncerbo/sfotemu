@@ -1,0 +1,27 @@
+[
+  {
+    "arguments": [
+      "/home/m/.nix-profile/bin/gcc",
+      "-c",
+      "-std=c99",
+      "-Wall",
+      "-Wextra",
+      "-I",
+      "./src/headers",
+      "-I",
+      "./src",
+      "-O0",
+      "-g3",
+      "-I",
+      "src",
+      "-I",
+      "src/headers",
+      "-o",
+      "out/dev",
+      "src/main.c"
+    ],
+    "directory": "/s/sfotemu",
+    "file": "/s/sfotemu/src/main.c",
+    "output": "/s/sfotemu/out/dev"
+  }
+]

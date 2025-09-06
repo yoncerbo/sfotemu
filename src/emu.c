@@ -6,6 +6,8 @@
 #include <assert.h>
 #include <string.h>
 
+#define STACK_BOT ((uint16_t)0x0100)
+
 static inline uint8_t imm8(const Emu *e) {
   return e->memory[e->pc + 1];
 }
@@ -35,6 +37,14 @@ uint16_t Emu_load(const Emu *e, Addressing addressing) {
       fprintf(stderr, "Wrong addressing for load: %d\n", addressing);
       exit(1);
   }
+}
+
+static inline void Emu_stack_push(Emu *e, uint8_t value) {
+  e->memory[STACK_BOT + e->sp--] = value;
+}
+
+static inline uint8_t Emu_stack_pop(Emu *e) {
+  return e->memory[STACK_BOT + ++e->sp];
 }
 
 void Emu_store(Emu *e, Addressing addressing, uint8_t value) {
@@ -73,6 +83,7 @@ void Emu_reset(Emu *e, Str program) {
   assert(program.len < MAX_PROG_SIZE);
   memcpy(&e->memory[PROG_ENTRY], program.ptr, program.len);
   e->pc = PROG_ENTRY;
+  e->sp = 0xfe;
 }
 
 void Emu_run(Emu *e, uint32_t fuel) {
@@ -86,6 +97,7 @@ void Emu_run(Emu *e, uint32_t fuel) {
       case OP_BRK:
         return;
 
+      // Loads and stores
       case OP_LDA:
         e->a = set_flags_nz(e, Emu_load(e, inst.addr));
         break;
@@ -95,7 +107,6 @@ void Emu_run(Emu *e, uint32_t fuel) {
       case OP_LDY:
         e->y = set_flags_nz(e, Emu_load(e, inst.addr));
         break;
-
       case OP_STA:
         Emu_store(e, inst.addr, e->a);
         break;
@@ -106,6 +117,7 @@ void Emu_run(Emu *e, uint32_t fuel) {
         Emu_store(e, inst.addr, e->y);
         break;
       
+      // Register transfers
       case OP_TAX:
         e->x = set_flags_nz(e, e->a);
         break;
@@ -117,6 +129,26 @@ void Emu_run(Emu *e, uint32_t fuel) {
         break;
       case OP_TYA:
         e->a = set_flags_nz(e, e->y);
+        break;
+
+      // Stack operations
+      case OP_TSX:
+        e->x = set_flags_nz(e, e->sp);
+        break;
+      case OP_TXS:
+        e->sp = e->x;
+        break;
+      case OP_PHA:
+        Emu_stack_push(e, e->a);
+        break;
+      case OP_PHP:
+        Emu_stack_push(e, e->flags);
+        break;
+      case OP_PLA:
+        e->a = set_flags_nz(e, Emu_stack_pop(e));
+        break;
+      case OP_PLP:
+        e->flags = Emu_stack_pop(e);
         break;
 
       default:

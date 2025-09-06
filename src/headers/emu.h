@@ -53,6 +53,13 @@ typedef enum {
   OP_TAY,
   OP_TXA,
   OP_TYA,
+
+  OP_TSX,
+  OP_TXS,
+  OP_PHA,
+  OP_PHP,
+  OP_PLA,
+  OP_PLP,
 } Opcode;
 
 typedef struct {
@@ -107,17 +114,20 @@ static const Inst INSTRUCTIONS[256] = {
   [0x94] = { OP_STY, ADDR_ZPX },
   [0x8C] = { OP_STY, ADDR_AB },
 
-  // TAX
+  // Register transfers
   [0xAA] = { OP_TAX, ADDR_IMP },
-
-  // TAY
   [0xA8] = { OP_TAY, ADDR_IMP },
-
-  // TXA
   [0x8A] = { OP_TXA, ADDR_IMP },
-
-  // TYA
   [0x98] = { OP_TYA, ADDR_IMP },
+
+  // Stack operations
+  [0xBA] = { OP_TSX, ADDR_IMP },
+  [0x9A] = { OP_TXS, ADDR_IMP },
+  [0x48] = { OP_PHA, ADDR_IMP },
+  [0x08] = { OP_PHP, ADDR_IMP },
+  [0x68] = { OP_PLA, ADDR_IMP },
+  [0x28] = { OP_PLP, ADDR_IMP },
+
 };
 
 typedef enum {

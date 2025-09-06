@@ -14,10 +14,10 @@ build-dev: src/*
 	gcc ${CFLAGS} ${DEV_FLAGS} -I src -I src/headers -o out/dev src/main.c
 
 release: build-release
-	./out/release $(file)
+	./out/release $(in)
 
 run: build-dev
-	./out/dev $(file)
+	./out/dev $(in)
 
 out/test_%: src/test_%.c src/*
 	mkdir -p out
@@ -25,3 +25,9 @@ out/test_%: src/test_%.c src/*
 
 test_%: out/test_%
 	$<
+
+out/%.prg: examples/%.asm
+	acme --cpu 6502 -o $@ $<
+
+run_%: out/%.prg build-dev
+	./out/dev $<

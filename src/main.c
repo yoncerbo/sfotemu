@@ -1,16 +1,23 @@
-#include "emu.c"
-#include "emu.h"
-#include "stdlib.h"
 #include <assert.h>
+#include <stdint.h>
+#include <string.h>
 
-int main(void) {
+#include "common.h"
+#include "emu.h"
+
+#include "fs.c"
+#include "emu.c"
+
+int main(int argc, char *argv[]) {
+  assert(argc == 2);
+  const char *filename = argv[1];
+
+  Str file = map_file_readonly(filename);
+  assert(file.len < 64 * 1024);
+
   Emu *e = malloc(sizeof *e);
-
-  Emu_reset(e);
-
-  e->memory[0] = OP_LDA_IMM;
-  e->memory[1] = 0xcd;
-  Emu_run(e, 1);
+  Emu_reset(e, file);
+  Emu_run(e, UINT32_MAX);
 
   return 0;
 }

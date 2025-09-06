@@ -151,6 +151,22 @@ void Emu_run(Emu *e, uint32_t fuel) {
         e->flags = Emu_stack_pop(e);
         break;
 
+      // Logical operations
+      case OP_AND:
+        e->a &= set_flags_nz(e, Emu_load(e, inst.addr));
+        break;
+      case OP_EOR:
+        e->a ^= set_flags_nz(e, Emu_load(e, inst.addr));
+        break;
+      case OP_ORA:
+        e->a |= set_flags_nz(e, Emu_load(e, inst.addr));
+        break;
+      case OP_BIT:
+        // TODO: this instruction feels kinda weird, I have to think about it
+        fprintf(stderr, "BIT instruction not implmeneted yet!\n");
+        exit(1);
+        break;
+
       default:
         fprintf(stderr, "Unknown instruction: 0x%x\n", e->memory[e->pc]);
         exit(1);

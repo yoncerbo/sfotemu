@@ -78,7 +78,7 @@ void Emu_reset(Emu *e, Str program) {
 void Emu_run(Emu *e, uint32_t fuel) {
   for (uint32_t i = 0; i < fuel; ++i) {
     Inst inst = INSTRUCTIONS[e->memory[e->pc]];
-    if (inst.size == 0) {
+    if (inst.opcode == OP_NONE) {
       fprintf(stderr, "Unknown instruction: 0x%x\n", e->memory[e->pc]);
       exit(1);
     }
@@ -87,16 +87,42 @@ void Emu_run(Emu *e, uint32_t fuel) {
         return;
 
       case OP_LDA:
-        e->a = Emu_load(e, inst.addr);
+        e->a = set_flags_nz(e, Emu_load(e, inst.addr));
         break;
+      case OP_LDX:
+        e->x = set_flags_nz(e, Emu_load(e, inst.addr));
+        break;
+      case OP_LDY:
+        e->y = set_flags_nz(e, Emu_load(e, inst.addr));
+        break;
+
       case OP_STA:
         Emu_store(e, inst.addr, e->a);
+        break;
+      case OP_STX:
+        Emu_store(e, inst.addr, e->x);
+        break;
+      case OP_STY:
+        Emu_store(e, inst.addr, e->y);
+        break;
+      
+      case OP_TAX:
+        e->x = set_flags_nz(e, e->a);
+        break;
+      case OP_TAY:
+        e->y = set_flags_nz(e, e->a);
+        break;
+      case OP_TXA:
+        e->a = set_flags_nz(e, e->x);
+        break;
+      case OP_TYA:
+        e->a = set_flags_nz(e, e->y);
         break;
 
       default:
         fprintf(stderr, "Unknown instruction: 0x%x\n", e->memory[e->pc]);
         exit(1);
     }
-    e->pc += inst.size;
+    e->pc += INST_SIZE[inst.addr];
   }
 }

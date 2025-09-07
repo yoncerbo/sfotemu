@@ -5,9 +5,12 @@
 
 #define PROG_ENTRY ((uint16_t)0x200)
 #define MAX_PROG_SIZE (64 * 1024 - PROG_ENTRY)
+
 // TODO: only for debugging
 #define PUTC_DEV ((uint16_t)0xFE10)
 #define PUTD_DEV ((uint16_t)0xFE11)
+#define SYS_EXIT ((uint8_t)0)
+#define SYS_PRINT ((uint8_t)1)
 
 typedef enum {
   ADDR_ACC,

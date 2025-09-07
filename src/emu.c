@@ -113,7 +113,19 @@ void Emu_run(Emu *e, uint32_t fuel) {
     }
     switch (inst.opcode) {
       case OP_BRK:
-        return;
+        switch (e->a) {
+          case SYS_PRINT:
+            uint16_t ptr = (e->y << 8) | e->x;
+            printf("%s", &e->memory[ptr]);
+            break;
+          case SYS_EXIT:
+            return;
+          default:
+            fprintf(stderr, "Unknown system call: %d, pc=%d\n",
+                e->a, e->pc - PROG_ENTRY);
+            exit(1);
+        }
+        break;
 
       // Loads and stores
       case OP_LDA:

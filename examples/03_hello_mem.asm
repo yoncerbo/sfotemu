@@ -21,6 +21,7 @@ inx
 lda #10
 sta PUTC
 
+lda #SYS_EXIT
 brk
 
 hello !text "Hello",10

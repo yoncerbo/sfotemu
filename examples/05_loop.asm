@@ -7,3 +7,6 @@ loop:
   stx PUTD
   cpx #10
   bne loop
+
+  lda #SYS_EXIT
+  brk

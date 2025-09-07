@@ -4,5 +4,5 @@
 PUTC = $fe10
 PUTD = $fe11
 
+SYS_EXIT = 0
 SYS_PRINT = 1
-SYS_EXIT = 60

@@ -9,6 +9,7 @@ loop:
   cpx hello_len
   bne loop
 
+  lda #SYS_EXIT
   brk
 
 hello: !text "Hello, World!",10

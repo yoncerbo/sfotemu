@@ -12,4 +12,6 @@ lda #'o'
 sta PUTC
 lda #10
 sta PUTC
+
+lda #SYS_EXIT
 brk

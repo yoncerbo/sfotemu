@@ -27,7 +27,7 @@ test_%: out/test_%
 	$<
 
 out/%.prg: examples/%.asm
-	acme --cpu 6502 -o $@ $<
+	acme --cpu 6502 -I examples -o $@ $<
 
 run_%: out/%.prg build-dev
 	./out/dev $<

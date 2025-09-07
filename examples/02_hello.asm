@@ -1,6 +1,4 @@
-*=$0200
-
-PUTC = $fe10
+!source "io_v1.asm"
 
 lda #'H'
 sta PUTC

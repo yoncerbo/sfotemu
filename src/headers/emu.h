@@ -7,6 +7,7 @@
 #define MAX_PROG_SIZE (64 * 1024 - PROG_ENTRY)
 // TODO: only for debugging
 #define PUTC_DEV ((uint16_t)0xFE10)
+#define PUTD_DEV ((uint16_t)0xFE11)
 
 typedef enum {
   ADDR_ACC,
@@ -37,6 +38,8 @@ static const uint8_t INST_SIZE[ADDR_COUNT] = {
   [ADDR_ABY] = 3,
   [ADDR_IX] = 2,
   [ADDR_IY] = 2,
+  [ADDR_REL] = 2,
+  [ADDR_ACC] = 1,
 };
 
 // http://www.6502.org/users/obelisk/6502/instructions.html
